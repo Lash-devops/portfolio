@@ -405,7 +405,7 @@
               </button>
               <p id="review-status" class="text-sm font-medium" role="status" aria-live="polite"></p>
             </form>
-            <p class="mt-4 text-xs text-slate-400">Отзыв сохраняется в твоём браузере (демо). Чтобы отзывы были общими для всех, позже подключим базу данных.</p>
+            <p class="mt-4 text-xs text-slate-400">Отзыв публикуется на сайте и виден всем посетителям. Пожалуйста, будь вежлив 🙂</p>
           </div>
         </div>
       </div>
@@ -531,6 +531,22 @@
 
   <!-- ============ JAVASCRIPT ============ -->
   <script>
+    /* ============================================================
+       НАСТРОЙКИ (вставь сюда свои ключи)
+       1) WEB3FORMS_KEY  — access key с https://web3forms.com
+       2) SUPABASE_URL   — Project URL из настроек Supabase
+       3) SUPABASE_KEY   — публичный anon-ключ из настроек Supabase
+       Пока стоят значения вида "YOUR_..." — сайт работает в
+       демо-режиме (форма и отзывы не уходят на сервер).
+       ============================================================ */
+    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+    const SUPABASE_URL  = 'YOUR_SUPABASE_URL';
+    const SUPABASE_KEY  = 'YOUR_SUPABASE_ANON_KEY';
+
+    const isSet = (v) => v && !v.startsWith('YOUR_');
+    const SUPABASE_READY = isSet(SUPABASE_URL) && isSet(SUPABASE_KEY);
+    const WEB3FORMS_READY = isSet(WEB3FORMS_KEY);
+
     // ---- Тема (тёмная/светлая) с сохранением ----
     const html = document.documentElement;
     const themeToggle = document.getElementById('theme-toggle');
@@ -569,41 +585,79 @@
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // ---- Отзывы (сохранение в localStorage) ----
+    // ---- Отзывы (база данных Supabase, с запасом на localStorage) ----
     const reviewForm = document.getElementById('review-form');
     const reviewsList = document.getElementById('reviews-list');
     const reviewsEmpty = document.getElementById('reviews-empty');
     const reviewStatus = document.getElementById('review-status');
     const ratingInput = document.getElementById('review-rating');
     const stars = Array.from(document.querySelectorAll('#rating-stars .star'));
-    const REVIEWS_KEY = 'lash_reviews';
+    const REVIEWS_KEY = 'lash_reviews'; // запасное хранилище, пока БД не настроена
 
     // экранирование, чтобы нельзя было вставить теги
-    const escapeHTML = (str) => str.replace(/[&<>"']/g, c =>
+    const escapeHTML = (str) => String(str).replace(/[&<>"']/g, c =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-    const loadReviews = () => {
-      try { return JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []; }
-      catch { return []; }
+    // запасной режим (localStorage) — используется, если Supabase не настроен
+    const localLoad = () => {
+      try { return JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []; } catch { return []; }
     };
-    const saveReviews = (list) => localStorage.setItem(REVIEWS_KEY, JSON.stringify(list));
+    const localSave = (list) => localStorage.setItem(REVIEWS_KEY, JSON.stringify(list));
 
-    const renderReviews = () => {
-      const list = loadReviews();
-      reviewsEmpty.style.display = list.length ? 'none' : '';
-      reviewsList.innerHTML = list.map(r => {
-        const full = '★'.repeat(r.rating);
-        const empty = '☆'.repeat(5 - r.rating);
-        return `
-          <figure class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-            <div class="text-amber-400" aria-label="Оценка ${r.rating} из 5">${full}<span class="text-slate-300 dark:text-slate-600">${empty}</span></div>
-            <blockquote class="mt-4 text-slate-600 dark:text-slate-400">«${escapeHTML(r.text)}»</blockquote>
-            <figcaption class="mt-5 flex items-center gap-3">
-              <span class="grid place-items-center w-11 h-11 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-300 font-bold">${escapeHTML(r.name.charAt(0).toUpperCase())}</span>
-              <div class="font-semibold">${escapeHTML(r.name)}</div>
-            </figcaption>
-          </figure>`;
-      }).join('');
+    // получить отзывы: из Supabase или из localStorage
+    const fetchReviews = async () => {
+      if (!SUPABASE_READY) return localLoad();
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?select=*&order=created_at.desc`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+      });
+      if (!res.ok) throw new Error('Не удалось загрузить отзывы');
+      return res.json();
+    };
+
+    // сохранить отзыв
+    const insertReview = async (review) => {
+      if (!SUPABASE_READY) {
+        const list = localLoad(); list.unshift(review); localSave(list); return;
+      }
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify(review),
+      });
+      if (!res.ok) throw new Error('Не удалось сохранить отзыв');
+    };
+
+    const reviewCard = (r) => {
+      const rating = Number(r.rating) || 0;
+      const full = '★'.repeat(rating);
+      const empty = '☆'.repeat(5 - rating);
+      return `
+        <figure class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+          <div class="text-amber-400" aria-label="Оценка ${rating} из 5">${full}<span class="text-slate-300 dark:text-slate-600">${empty}</span></div>
+          <blockquote class="mt-4 text-slate-600 dark:text-slate-400">«${escapeHTML(r.text)}»</blockquote>
+          <figcaption class="mt-5 flex items-center gap-3">
+            <span class="grid place-items-center w-11 h-11 rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-300 font-bold">${escapeHTML(String(r.name).charAt(0).toUpperCase())}</span>
+            <div class="font-semibold">${escapeHTML(r.name)}</div>
+          </figcaption>
+        </figure>`;
+    };
+
+    const renderReviews = async () => {
+      try {
+        const list = await fetchReviews();
+        reviewsEmpty.textContent = 'Отзывов пока нет. Оставь свой ниже 👇';
+        reviewsEmpty.style.display = list.length ? 'none' : '';
+        reviewsList.innerHTML = list.map(reviewCard).join('');
+      } catch (err) {
+        reviewsList.innerHTML = '';
+        reviewsEmpty.style.display = '';
+        reviewsEmpty.textContent = 'Не удалось загрузить отзывы. Попробуй обновить страницу.';
+      }
     };
 
     // выбор звёзд
@@ -619,7 +673,7 @@
     document.getElementById('rating-stars').addEventListener('mouseleave', () =>
       paintStars(Number(ratingInput.value)));
 
-    reviewForm.addEventListener('submit', (e) => {
+    reviewForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('review-name').value.trim();
       const text = document.getElementById('review-text').value.trim();
@@ -629,32 +683,77 @@
         reviewStatus.className = 'text-sm font-medium text-red-500';
         return;
       }
-      const list = loadReviews();
-      list.unshift({ name, text, rating });
-      saveReviews(list);
-      renderReviews();
-      reviewForm.reset();
-      ratingInput.value = '0';
-      paintStars(0);
-      reviewStatus.textContent = '✅ Спасибо за отзыв!';
-      reviewStatus.className = 'text-sm font-medium text-emerald-500';
+      const submitBtn = reviewForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      reviewStatus.textContent = 'Отправляю...';
+      reviewStatus.className = 'text-sm font-medium text-slate-500';
+      try {
+        await insertReview({ name, text, rating });
+        reviewForm.reset();
+        ratingInput.value = '0';
+        paintStars(0);
+        await renderReviews();
+        reviewStatus.textContent = '✅ Спасибо за отзыв!';
+        reviewStatus.className = 'text-sm font-medium text-emerald-500';
+      } catch (err) {
+        reviewStatus.textContent = '😔 Не получилось отправить. Попробуй ещё раз позже.';
+        reviewStatus.className = 'text-sm font-medium text-red-500';
+      } finally {
+        submitBtn.disabled = false;
+      }
     });
 
     renderReviews();
 
-    // ---- Обработка формы (демо, без бэкенда) ----
+    // ---- Контактная форма (отправка на почту через Web3Forms) ----
     const form = document.getElementById('contact-form');
     const status = document.getElementById('form-status');
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!form.checkValidity()) {
         status.textContent = 'Пожалуйста, заполни все поля корректно.';
         status.className = 'mt-3 text-sm font-medium text-red-500';
         return;
       }
-      status.textContent = '✅ Спасибо! Сообщение отправлено. Я скоро отвечу.';
-      status.className = 'mt-3 text-sm font-medium text-emerald-500';
-      form.reset();
+
+      // демо-режим, пока ключ Web3Forms не вставлен
+      if (!WEB3FORMS_READY) {
+        status.textContent = '✅ (демо) Форма заполнена верно. Добавь ключ Web3Forms, чтобы письма приходили на почту.';
+        status.className = 'mt-3 text-sm font-medium text-emerald-500';
+        form.reset();
+        return;
+      }
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      status.textContent = 'Отправляю...';
+      status.className = 'mt-3 text-sm font-medium text-slate-500';
+
+      const data = new FormData(form);
+      data.append('access_key', WEB3FORMS_KEY);
+      data.append('subject', 'Новое сообщение с сайта-портфолио Lash');
+      data.append('from_name', 'Портфолио Lash');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: data,
+        });
+        const json = await res.json();
+        if (json.success) {
+          status.textContent = '✅ Спасибо! Сообщение отправлено. Я скоро отвечу.';
+          status.className = 'mt-3 text-sm font-medium text-emerald-500';
+          form.reset();
+        } else {
+          throw new Error(json.message || 'Ошибка отправки');
+        }
+      } catch (err) {
+        status.textContent = '😔 Не получилось отправить. Напиши мне на почту напрямую.';
+        status.className = 'mt-3 text-sm font-medium text-red-500';
+      } finally {
+        submitBtn.disabled = false;
+      }
     });
   </script>
 </body>

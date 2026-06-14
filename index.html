@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Lash — Frontend-разработчик | Портфолио</title>
+  <meta name="description" content="Портфолио frontend-разработчика Lash. Современные адаптивные сайты, лендинги и веб-приложения на HTML, CSS, Tailwind и JavaScript. Чистый код, аккуратный дизайн, забота о деталях." />
+  <meta name="author" content="Lash" />
+  <meta name="keywords" content="Lash, frontend, веб-разработчик, верстальщик, портфолио, HTML, CSS, Tailwind, JavaScript" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lash — Frontend-разработчик" />
+  <meta property="og:description" content="Создаю быстрые, красивые и адаптивные сайты. Посмотри мои работы." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&q=80" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon (emoji) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>" />
+
+  <!-- Tailwind CSS (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe',
+              300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1',
+              600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'gradient': 'gradient 8s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-16px)' },
+            },
+            gradient: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Шрифт Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Кастомные мелочи, которые удобнее держать в CSS */
+    html { scroll-padding-top: 5rem; }
+    .text-gradient {
+      background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6, #818cf8);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    /* Анимация появления при скролле */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Кастомный скроллбар */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 9999px; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 font-sans antialiased transition-colors duration-300">
+
+  <!-- Кнопка "пропустить навигацию" для доступности -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-brand-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+    Перейти к содержимому
+  </a>
+
+  <!-- ============ ХЕДЕР / НАВИГАЦИЯ ============ -->
+  <header class="fixed top-0 inset-x-0 z-40 backdrop-blur-lg bg-white/70 dark:bg-slate-950/70 border-b border-slate-200/60 dark:border-slate-800/60">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between" aria-label="Основная навигация">
+      <a href="#hero" class="flex items-center gap-2 font-extrabold text-lg">
+        <span class="grid place-items-center w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-purple-500 text-white">L</span>
+        <span>Lash<span class="text-brand-500">.dev</span></span>
+      </a>
+
+      <!-- Меню для десктопа -->
+      <ul class="hidden md:flex items-center gap-1">
+        <li><a href="#about"    class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Обо мне</a></li>
+        <li><a href="#skills"   class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Навыки</a></li>
+        <li><a href="#projects" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Проекты</a></li>
+        <li><a href="#contact"  class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Контакты</a></li>
+      </ul>
+
+      <div class="flex items-center gap-2">
+        <!-- Переключатель темы -->
+        <button id="theme-toggle" type="button" aria-label="Переключить тему"
+          class="grid place-items-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+          <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+        </button>
+
+        <a href="#contact" class="hidden sm:inline-flex px-4 py-2 rounded-lg bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 shadow-lg shadow-brand-600/30 transition">
+          Связаться
+        </a>
+
+        <!-- Бургер для мобильных -->
+        <button id="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu"
+          class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+      <ul class="px-4 py-3 space-y-1">
+        <li><a href="#about"    class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Обо мне</a></li>
+        <li><a href="#skills"   class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Навыки</a></li>
+        <li><a href="#projects" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Проекты</a></li>
+        <li><a href="#contact"  class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Контакты</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section id="hero" class="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+      <!-- Декоративные пятна -->
+      <div aria-hidden="true" class="absolute -top-24 -left-24 w-96 h-96 bg-brand-400/30 rounded-full blur-3xl"></div>
+      <div aria-hidden="true" class="absolute top-20 -right-24 w-96 h-96 bg-purple-400/30 rounded-full blur-3xl"></div>
+
+      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-sm font-medium mb-5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Открыт для заказов
+          </span>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+            Привет, я <span class="text-gradient animate-gradient">Lash</span> —<br>
+            Frontend-разработчик
+          </h1>
+          <p class="mt-5 text-lg text-slate-600 dark:text-slate-400 max-w-md">
+            Превращаю идеи в быстрые, красивые и адаптивные сайты. Пишу чистый код на HTML, CSS, Tailwind и JavaScript — и довожу каждый интерфейс до пиксельной точности.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 shadow-lg shadow-brand-600/30 hover:-translate-y-0.5 transition">
+              Мои работы
+            </a>
+            <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 hover:-translate-y-0.5 transition">
+              Написать мне
+            </a>
+          </div>
+          <!-- Мини-статистика -->
+          <dl class="mt-10 grid grid-cols-3 gap-4 max-w-md">
+            <div><dt class="text-2xl font-extrabold text-brand-500">12+</dt><dd class="text-sm text-slate-500">Проектов</dd></div>
+            <div><dt class="text-2xl font-extrabold text-brand-500">2</dt><dd class="text-sm text-slate-500">Года практики</dd></div>
+            <div><dt class="text-2xl font-extrabold text-brand-500">100%</dt><dd class="text-sm text-slate-500">Адаптив</dd></div>
+          </dl>
+        </div>
+
+        <div class="reveal flex justify-center md:justify-end">
+          <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-500 to-purple-500 rounded-[2rem] blur-2xl opacity-40 animate-float"></div>
+            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&q=80"
+              alt="Портрет Lash, frontend-разработчика"
+              class="relative w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-[2rem] ring-4 ring-white dark:ring-slate-800 shadow-2xl animate-float" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ОБО МНЕ ============ -->
+    <section id="about" class="py-20 sm:py-28">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80"
+            alt="Рабочее место разработчика с кодом на экране"
+            class="rounded-2xl shadow-xl w-full object-cover" />
+        </div>
+        <div class="reveal">
+          <span class="text-brand-500 font-semibold">Обо мне</span>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold">Кто я и чем занимаюсь</h2>
+          <p class="mt-5 text-slate-600 dark:text-slate-400">
+            Меня зовут Lash, я frontend-разработчик. Влюблён в чистый код и аккуратный дизайн: мне нравится
+            доводить интерфейсы до пиксельной точности и следить, чтобы сайт одинаково хорошо смотрелся
+            и на телефоне в метро, и на большом мониторе.
+          </p>
+          <p class="mt-4 text-slate-600 dark:text-slate-400">
+            Я пришёл в вёрстку из любви к деталям. Начинал с простых лендингов, а сейчас собираю
+            полноценные адаптивные сайты и небольшие веб-приложения. Постоянно учусь новому и применяю
+            современные подходы — mobile-first, доступность и забота о скорости загрузки — в каждом проекте.
+          </p>
+          <ul class="mt-6 space-y-3">
+            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Семантическая и валидная вёрстка</li>
+            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Адаптивность под любые устройства</li>
+            <li class="flex items-center gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Внимание к деталям и доступности</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ НАВЫКИ ============ -->
+    <section id="skills" class="py-20 sm:py-28 bg-white dark:bg-slate-900/40">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="text-brand-500 font-semibold">Навыки</span>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold">Чем я владею</h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400">Инструменты, с которыми работаю каждый день.</p>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Карточка навыка -->
+          <article class="reveal group p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:-translate-y-1 transition">
+            <div class="w-12 h-12 grid place-items-center rounded-xl bg-orange-100 text-orange-600 text-2xl group-hover:scale-110 transition">📄</div>
+            <h3 class="mt-4 font-bold text-lg">HTML5</h3>
+            <p class="mt-1 text-sm text-slate-500">Семантическая разметка, формы, доступность.</p>
+          </article>
+          <article class="reveal group p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:-translate-y-1 transition">
+            <div class="w-12 h-12 grid place-items-center rounded-xl bg-blue-100 text-blue-600 text-2xl group-hover:scale-110 transition">🎨</div>
+            <h3 class="mt-4 font-bold text-lg">CSS3</h3>
+            <p class="mt-1 text-sm text-slate-500">Flexbox, Grid, анимации, адаптивность.</p>
+          </article>
+          <article class="reveal group p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:-translate-y-1 transition">
+            <div class="w-12 h-12 grid place-items-center rounded-xl bg-cyan-100 text-cyan-600 text-2xl group-hover:scale-110 transition">🌊</div>
+            <h3 class="mt-4 font-bold text-lg">Tailwind CSS</h3>
+            <p class="mt-1 text-sm text-slate-500">Быстрая утилитарная вёрстка, темизация.</p>
+          </article>
+          <article class="reveal group p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:-translate-y-1 transition">
+            <div class="w-12 h-12 grid place-items-center rounded-xl bg-yellow-100 text-yellow-600 text-2xl group-hover:scale-110 transition">⚡</div>
+            <h3 class="mt-4 font-bold text-lg">JavaScript</h3>
+            <p class="mt-1 text-sm text-slate-500">DOM, события, интерактив, анимации.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ПРОЕКТЫ (с фильтром-табами) ============ -->
+    <section id="projects" class="py-20 sm:py-28">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="text-brand-500 font-semibold">Портфолио</span>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold">Мои проекты</h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400">Несколько работ, которыми я горжусь. Нажми на карточку, чтобы узнать подробнее.</p>
+        </div>
+
+        <!-- Фильтр -->
+        <div class="mt-10 flex flex-wrap justify-center gap-2 reveal" role="tablist" aria-label="Фильтр проектов">
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-brand-600 text-white transition" data-filter="all" aria-selected="true">Все</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-filter="landing">Лендинги</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-filter="app">Приложения</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" data-filter="shop">Магазины</button>
+        </div>
+
+        <!-- Сетка проектов -->
+        <div id="projects-grid" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Проект -->
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="landing"
+            data-title="Лендинг для кофейни"
+            data-image="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80"
+            data-desc="Адаптивный одностраничный сайт для городской кофейни с меню, галереей и формой бронирования столика."
+            data-tags="HTML, Tailwind, JS">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80" alt="Лендинг для кофейни" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Лендинг</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Лендинг для кофейни</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Уютный сайт с меню и онлайн-бронированием.</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="app"
+            data-title="Трекер задач"
+            data-image="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&q=80"
+            data-desc="Веб-приложение для управления задачами с drag-and-drop, фильтрами и сохранением в localStorage."
+            data-tags="JS, Tailwind, LocalStorage">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&q=80" alt="Веб-приложение трекер задач" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Приложение</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Трекер задач</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Канбан-доска с drag-and-drop.</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="shop"
+            data-title="Магазин кроссовок"
+            data-image="https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80"
+            data-desc="Интернет-магазин с каталогом, корзиной и фильтрами по размеру и цвету. Адаптивная сетка товаров."
+            data-tags="HTML, Tailwind, JS">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1556906781-9a412961c28c?w=600&q=80" alt="Интернет-магазин кроссовок" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Магазин</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Магазин кроссовок</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Каталог с корзиной и фильтрами.</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="landing"
+            data-title="Промо для приложения"
+            data-image="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
+            data-desc="Яркий промо-лендинг для мобильного фитнес-приложения с анимациями и кнопками скачивания."
+            data-tags="Tailwind, JS, Анимации">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80" alt="Промо-лендинг приложения" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Лендинг</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Промо для приложения</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Анимированный промо-сайт.</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="app"
+            data-title="Погодный виджет"
+            data-image="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&q=80"
+            data-desc="Виджет погоды с подключением к API, поиском по городам и красивыми иконками состояния."
+            data-tags="JS, Fetch API, Tailwind">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=600&q=80" alt="Погодный виджет" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Приложение</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Погодный виджет</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Погода через API с поиском.</p>
+            </div>
+          </article>
+
+          <article class="project-card reveal group cursor-pointer rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition"
+            data-category="shop"
+            data-title="Магазин цветов"
+            data-image="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&q=80"
+            data-desc="Нежный интернет-магазин букетов с категориями, избранным и быстрым оформлением заказа."
+            data-tags="HTML, Tailwind, JS">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&q=80" alt="Магазин цветов" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Магазин</span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-bold text-lg">Магазин цветов</h3>
+              <p class="mt-1 text-sm text-slate-500 line-clamp-2">Каталог букетов с избранным.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ КОНТАКТЫ ============ -->
+    <section id="contact" class="py-20 sm:py-28 bg-white dark:bg-slate-900/40">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="text-center reveal">
+          <span class="text-brand-500 font-semibold">Контакты</span>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold">Давай работать вместе</h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400">Расскажи о своём проекте — я отвечу в течение дня.</p>
+        </div>
+
+        <form id="contact-form" class="mt-10 reveal grid sm:grid-cols-2 gap-5" novalidate>
+          <div class="sm:col-span-1">
+            <label for="name" class="block text-sm font-medium mb-1.5">Имя</label>
+            <input id="name" name="name" type="text" required autocomplete="name"
+              class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
+              placeholder="Как тебя зовут?" />
+          </div>
+          <div class="sm:col-span-1">
+            <label for="email" class="block text-sm font-medium mb-1.5">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email"
+              class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
+              placeholder="you@example.com" />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="message" class="block text-sm font-medium mb-1.5">Сообщение</label>
+            <textarea id="message" name="message" rows="4" required
+              class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition resize-none"
+              placeholder="Опиши свой проект..."></textarea>
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 shadow-lg shadow-brand-600/30 hover:-translate-y-0.5 transition">
+              Отправить сообщение
+            </button>
+            <p id="form-status" class="mt-3 text-sm font-medium" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ ФУТЕР ============ -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-slate-500">© 2026 Lash. Сделано с ❤️ и Tailwind CSS.</p>
+      <ul class="flex items-center gap-3">
+        <li><a href="#" aria-label="GitHub" class="grid place-items-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.66-.22.66-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.33.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z"/></svg></a></li>
+        <li><a href="#" aria-label="Telegram" class="grid place-items-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></a></li>
+        <li><a href="#" aria-label="LinkedIn" class="grid place-items-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.34 17.34V10.5H6.07v6.84h2.27zM7.2 9.5a1.32 1.32 0 100-2.64 1.32 1.32 0 000 2.64zm10.14 7.84v-3.75c0-2-1.07-2.93-2.5-2.93-1.15 0-1.67.63-1.96 1.08v-.93h-2.27v6.53h2.27v-3.62c0-.96.18-1.89 1.37-1.89 1.17 0 1.19 1.1 1.19 1.95v3.56h2.13z"/></svg></a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ============ МОДАЛКА ПРОЕКТА ============ -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="modal-overlay" class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-300" id="modal-box">
+      <button id="modal-close" type="button" aria-label="Закрыть"
+        class="absolute top-3 right-3 z-10 grid place-items-center w-9 h-9 rounded-full bg-white/90 text-slate-700 hover:bg-white shadow transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+      <img id="modal-image" src="" alt="" class="w-full h-56 object-cover" />
+      <div class="p-6">
+        <h3 id="modal-title" class="text-2xl font-extrabold"></h3>
+        <p id="modal-desc" class="mt-3 text-slate-600 dark:text-slate-400"></p>
+        <div id="modal-tags" class="mt-4 flex flex-wrap gap-2"></div>
+        <a href="#contact" id="modal-cta" class="mt-6 inline-flex px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 transition">
+          Хочу такой же
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+    // ---- Тема (тёмная/светлая) с сохранением ----
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // ---- Мобильное меню ----
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden') === false;
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    // Закрывать меню при клике по ссылке
+    mobileMenu.querySelectorAll('a').forEach(link =>
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      })
+    );
+
+    // ---- Появление элементов при скролле ----
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ---- Фильтр проектов ----
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // активная кнопка
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-brand-600', 'text-white');
+          b.classList.add('bg-slate-100', 'dark:bg-slate-800');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('bg-brand-600', 'text-white');
+        btn.classList.remove('bg-slate-100', 'dark:bg-slate-800');
+        btn.setAttribute('aria-selected', 'true');
+
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+
+    // ---- Модалка проекта ----
+    const modal = document.getElementById('modal');
+    const modalBox = document.getElementById('modal-box');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalTags = document.getElementById('modal-tags');
+
+    function openModal(card) {
+      modalImage.src = card.dataset.image;
+      modalImage.alt = card.dataset.title;
+      modalTitle.textContent = card.dataset.title;
+      modalDesc.textContent = card.dataset.desc;
+      modalTags.innerHTML = card.dataset.tags.split(',').map(t =>
+        `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 dark:bg-slate-800 text-brand-600 dark:text-brand-300">${t.trim()}</span>`
+      ).join('');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      requestAnimationFrame(() => {
+        modalBox.classList.remove('scale-95', 'opacity-0');
+      });
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modalBox.classList.add('scale-95', 'opacity-0');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }, 250);
+    }
+    cards.forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+      // открытие с клавиатуры
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card); }
+      });
+    });
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal-overlay').addEventListener('click', closeModal);
+    document.getElementById('modal-cta').addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    // ---- Обработка формы (демо, без бэкенда) ----
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        status.textContent = 'Пожалуйста, заполни все поля корректно.';
+        status.className = 'mt-3 text-sm font-medium text-red-500';
+        return;
+      }
+      status.textContent = '✅ Спасибо! Сообщение отправлено. Я скоро отвечу.';
+      status.className = 'mt-3 text-sm font-medium text-emerald-500';
+      form.reset();
+    });
+  </script>
+</body>
+</html>

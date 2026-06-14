@@ -23,7 +23,7 @@
 
 ## 🌐 Демо
 
-Сайт опубликован через GitHub Pages.
+Сайт опубликован через GitHub Pages: **https://lash-devops.github.io/portfolio/**
 
 ---
 

@@ -87,7 +87,12 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3l2 5-2.5 1.5a11 11 0 005 5L16 12l5 2v3a2 2 0 01-2 2A16 16 0 013 5z"/></svg>
           Позвонить
         </a>
+        <button id="save-contact" type="button" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
+          Сохранить контакт
+        </button>
       </div>
+      <p id="card-toast" class="mt-4 text-sm font-medium text-accent-400 h-5 transition-opacity opacity-0"></p>
 
       <!-- Соцсети -->
       <div class="mt-8 flex justify-center gap-3">
@@ -112,6 +117,44 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ---- Сохранение контакта в виде vCard (.vcf) ----
+    const toast = document.getElementById('card-toast');
+    const showToast = (msg) => {
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      setTimeout(() => toast.classList.add('opacity-0'), 2500);
+    };
+
+    document.getElementById('save-contact').addEventListener('click', () => {
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:Соколова;Алина;;;',
+        'FN:Алина Соколова',
+        'TITLE:UI/UX дизайнер',
+        'EMAIL;TYPE=INTERNET:hello@example.com',
+        'TEL;TYPE=CELL:+70000000000',
+        'END:VCARD',
+      ].join('\r\n');
+      const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'alina-sokolova.vcf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('✅ Контакт сохранён в файл');
+    });
+
+    // ---- Копирование email по клику ----
+    document.querySelector('a[href^="mailto:"]').addEventListener('click', (e) => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('hello@example.com').then(() => showToast('📋 Email скопирован'));
+      }
+    });
   </script>
 </body>
 </html>

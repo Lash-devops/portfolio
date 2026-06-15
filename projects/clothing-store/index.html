@@ -115,6 +115,13 @@
     </div>
 
     <div class="border-t border-neutral-200 p-5 space-y-4">
+      <!-- Прогресс до бесплатной доставки -->
+      <div id="shipping-box">
+        <p id="shipping-msg" class="text-sm text-neutral-600"></p>
+        <div class="mt-2 h-1.5 rounded-full bg-neutral-200 overflow-hidden">
+          <div id="shipping-bar" class="h-full bg-neutral-900 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
       <div class="flex items-center justify-between text-lg font-bold">
         <span>Итого</span>
         <span id="cart-total">0 ₽</span>
@@ -122,9 +129,15 @@
       <button id="checkout" class="w-full py-3.5 rounded-full bg-neutral-900 text-white font-semibold hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition" disabled>
         Оформить заказ
       </button>
+      <button id="clear-cart" class="w-full text-sm text-neutral-400 hover:text-red-500 transition hidden">Очистить корзину</button>
       <p id="checkout-msg" class="text-sm text-center font-medium text-emerald-600 hidden">✅ Спасибо за заказ! Это демо — оплата не подключена.</p>
     </div>
   </aside>
+
+  <!-- Тост-уведомление -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-full bg-neutral-900 text-white text-sm font-medium shadow-xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300">
+    Добавлено в корзину
+  </div>
 
   <!-- ============ JAVASCRIPT ============ -->
   <script>
@@ -181,6 +194,19 @@
     const cartTotalEl = document.getElementById('cart-total');
     const checkoutBtn = document.getElementById('checkout');
     const checkoutMsg = document.getElementById('checkout-msg');
+    const clearBtn = document.getElementById('clear-cart');
+    const shippingMsg = document.getElementById('shipping-msg');
+    const shippingBar = document.getElementById('shipping-bar');
+    const toastEl = document.getElementById('toast');
+    const FREE_SHIPPING = 10000; // порог бесплатной доставки, ₽
+
+    let toastTimer;
+    const showToast = (msg) => {
+      toastEl.textContent = msg;
+      toastEl.classList.remove('opacity-0', 'translate-y-3');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.add('opacity-0', 'translate-y-3'), 2000);
+    };
 
     const openCart = () => { cartEl.classList.remove('translate-x-full'); backdrop.classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden'; };
     const closeCart = () => { cartEl.classList.add('translate-x-full'); backdrop.classList.add('opacity-0', 'pointer-events-none'); document.body.style.overflow = ''; };
@@ -189,7 +215,11 @@
     backdrop.addEventListener('click', closeCart);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
-    const addToCart = (id) => { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); openCart(); };
+    const addToCart = (id) => {
+      cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart();
+      showToast(`«${PRODUCTS.find(p => p.id == id).name}» в корзине`);
+      openCart();
+    };
     const changeQty = (id, delta) => {
       cart[id] = (cart[id] || 0) + delta;
       if (cart[id] <= 0) delete cart[id];
@@ -210,6 +240,16 @@
       cartEmptyEl.classList.toggle('hidden', !empty);
       cartItemsEl.classList.toggle('hidden', empty);
       checkoutBtn.disabled = empty;
+      clearBtn.classList.toggle('hidden', empty);
+
+      // прогресс до бесплатной доставки
+      if (total >= FREE_SHIPPING) {
+        shippingMsg.innerHTML = '🎉 Бесплатная доставка!';
+        shippingBar.style.width = '100%';
+      } else {
+        shippingMsg.innerHTML = `До бесплатной доставки: <span class="font-semibold text-neutral-900">${money(FREE_SHIPPING - total)}</span>`;
+        shippingBar.style.width = Math.min(100, (total / FREE_SHIPPING) * 100) + '%';
+      }
 
       cartItemsEl.innerHTML = ids.map(id => {
         const p = PRODUCTS.find(p => p.id == id);
@@ -255,6 +295,8 @@
       checkoutMsg.classList.remove('hidden');
       setTimeout(() => checkoutMsg.classList.add('hidden'), 4000);
     });
+
+    clearBtn.addEventListener('click', () => { cart = {}; saveCart(); renderCart(); });
 
     // ---- Старт ----
     renderProducts();

@@ -52,8 +52,24 @@
         <li><a href="#gallery" class="hover:text-coffee-500 transition">Галерея</a></li>
         <li><a href="#visit" class="hover:text-coffee-500 transition">Как найти</a></li>
       </ul>
-      <a href="#visit" class="hidden sm:inline-flex px-5 py-2 rounded-full bg-coffee-600 text-white text-sm font-semibold hover:bg-coffee-700 transition">Забронировать</a>
+      <div class="flex items-center gap-2">
+        <a href="#visit" class="hidden sm:inline-flex px-5 py-2 rounded-full bg-coffee-600 text-white text-sm font-semibold hover:bg-coffee-700 transition">Забронировать</a>
+        <button id="menu-toggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-coffee-100 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
     </nav>
+
+    <!-- Мобильное меню -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-coffee-100 bg-coffee-50">
+      <ul class="px-4 py-3 space-y-1 font-medium">
+        <li><a href="#about" class="block px-3 py-2.5 rounded-lg hover:bg-coffee-100 transition">О нас</a></li>
+        <li><a href="#menu" class="block px-3 py-2.5 rounded-lg hover:bg-coffee-100 transition">Меню</a></li>
+        <li><a href="#gallery" class="block px-3 py-2.5 rounded-lg hover:bg-coffee-100 transition">Галерея</a></li>
+        <li><a href="#visit" class="block px-3 py-2.5 rounded-lg hover:bg-coffee-100 transition">Как найти</a></li>
+        <li><a href="#visit" class="block px-3 py-2.5 rounded-lg bg-coffee-600 text-white text-center mt-2">Забронировать</a></li>
+      </ul>
+    </div>
   </header>
 
   <main id="home">
@@ -171,10 +187,10 @@
         <h2 class="mt-3 font-serif text-4xl sm:text-5xl font-bold">Загляни к нам</h2>
       </div>
       <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&q=80" alt="Интерьер кофейни" loading="lazy" class="reveal rounded-2xl object-cover aspect-square hover:scale-[1.03] transition duration-500" />
-        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=500&q=80" alt="Латте-арт в чашке" loading="lazy" class="reveal rounded-2xl object-cover aspect-square hover:scale-[1.03] transition duration-500" />
-        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=500&q=80" alt="Уютный уголок кофейни" loading="lazy" class="reveal rounded-2xl object-cover aspect-square hover:scale-[1.03] transition duration-500" />
-        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&q=80" alt="Свежая выпечка" loading="lazy" class="reveal rounded-2xl object-cover aspect-square hover:scale-[1.03] transition duration-500" />
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&q=80" alt="Интерьер кофейни" loading="lazy" class="gallery-img reveal rounded-2xl object-cover aspect-square cursor-pointer hover:scale-[1.03] transition duration-500" />
+        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=500&q=80" alt="Латте-арт в чашке" loading="lazy" class="gallery-img reveal rounded-2xl object-cover aspect-square cursor-pointer hover:scale-[1.03] transition duration-500" />
+        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=500&q=80" alt="Уютный уголок кофейни" loading="lazy" class="gallery-img reveal rounded-2xl object-cover aspect-square cursor-pointer hover:scale-[1.03] transition duration-500" />
+        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&q=80" alt="Свежая выпечка" loading="lazy" class="gallery-img reveal rounded-2xl object-cover aspect-square cursor-pointer hover:scale-[1.03] transition duration-500" />
       </div>
     </section>
 
@@ -220,11 +236,67 @@
     </div>
   </footer>
 
+  <!-- Лайтбокс для галереи -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-coffee-900/90 backdrop-blur-sm">
+    <button id="lightbox-close" class="absolute top-4 right-4 grid place-items-center w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20 transition" aria-label="Закрыть">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl" />
+  </div>
+
+  <!-- Кнопка «наверх» -->
+  <button id="to-top" aria-label="Наверх" class="fixed bottom-6 right-6 z-40 grid place-items-center w-12 h-12 rounded-full bg-coffee-600 text-white shadow-lg hover:bg-coffee-700 opacity-0 translate-y-3 pointer-events-none transition-all duration-300">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
   <script>
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ---- Мобильное меню ----
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden') === false;
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    // ---- Лайтбокс галереи ----
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const openLightbox = (src, alt) => {
+      lightboxImg.src = src.replace('w=500', 'w=1200');
+      lightboxImg.alt = alt;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeLightbox = () => {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+    document.querySelectorAll('.gallery-img').forEach(img =>
+      img.addEventListener('click', () => openLightbox(img.src, img.alt)));
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // ---- Кнопка «наверх» ----
+    const toTop = document.getElementById('to-top');
+    addEventListener('scroll', () => {
+      const show = scrollY > 500;
+      toTop.classList.toggle('opacity-0', !show);
+      toTop.classList.toggle('translate-y-3', !show);
+      toTop.classList.toggle('pointer-events-none', !show);
+    });
+    toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
 </html>

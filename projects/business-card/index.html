@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Алина Соколова — UI/UX дизайнер | Визитка</title>
+  <meta name="description" content="Сайт-визитка UI/UX дизайнера Алины Соколовой. Проектирую удобные и красивые интерфейсы для приложений и сайтов." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Алина Соколова — UI/UX дизайнер" />
+  <meta property="og:description" content="Проектирую удобные и красивые интерфейсы." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: { 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488' },
+          },
+          fontFamily: { sans: ['Manrope', 'system-ui', 'sans-serif'] },
+          animation: { 'float': 'float 7s ease-in-out infinite', 'spin-slow': 'spin 22s linear infinite' },
+          keyframes: {
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-12px)' } },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(16px); }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-200 font-sans antialiased relative overflow-x-hidden">
+
+  <!-- Декоративный фон -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-accent-500/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-cyan-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.04)_1px,transparent_0)] [background-size:32px_32px]"></div>
+  </div>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+
+    <!-- Карточка-визитка -->
+    <section class="glass reveal rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-12 text-center">
+      <!-- Монограмма-аватар -->
+      <div class="relative mx-auto w-28 h-28">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-accent-400 to-cyan-500 blur-md opacity-60 animate-float"></div>
+        <div class="relative grid place-items-center w-28 h-28 rounded-full bg-gradient-to-br from-accent-500 to-cyan-600 text-white text-4xl font-extrabold ring-4 ring-white/10">
+          АС
+        </div>
+      </div>
+
+      <h1 class="mt-6 text-3xl sm:text-4xl font-extrabold text-white">Алина Соколова</h1>
+      <p class="mt-2 text-accent-400 font-semibold">UI/UX дизайнер</p>
+      <p class="mt-5 text-slate-400 max-w-md mx-auto">
+        Проектирую удобные и красивые интерфейсы для мобильных приложений и сайтов.
+        Превращаю сложное в простое и понятное для пользователя.
+      </p>
+
+      <!-- Навыки -->
+      <div class="mt-7 flex flex-wrap justify-center gap-2">
+        <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm">Figma</span>
+        <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm">Прототипы</span>
+        <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm">Дизайн-системы</span>
+        <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm">Mobile UX</span>
+        <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm">Исследования</span>
+      </div>
+
+      <!-- Кнопки контактов -->
+      <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+        <a href="mailto:hello@example.com" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-600 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Написать
+        </a>
+        <a href="tel:+70000000000" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3l2 5-2.5 1.5a11 11 0 005 5L16 12l5 2v3a2 2 0 01-2 2A16 16 0 013 5z"/></svg>
+          Позвонить
+        </a>
+      </div>
+
+      <!-- Соцсети -->
+      <div class="mt-8 flex justify-center gap-3">
+        <a href="#" aria-label="Behance" class="grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:text-accent-400 transition font-bold">Bē</a>
+        <a href="#" aria-label="Telegram" class="grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:text-accent-400 transition">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+        </a>
+        <a href="#" aria-label="Dribbble" class="grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:text-accent-400 transition">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm6.6 5.84a8.6 8.6 0 011.94 5.18c-.3-.06-3.3-.67-6.32-.29-.07-.16-.13-.32-.2-.49-.18-.43-.39-.87-.6-1.29 3.34-1.36 4.86-3.32 5.18-3.11zM12 3.45c1.94 0 3.71.73 5.05 1.92-.27.38-1.64 2.21-4.87 3.42a45.7 45.7 0 00-3.3-5.15c.99-.25 2.04-.19 3.12-.19zM5.6 4.96a52 52 0 013.27 5.08c-4.2 1.12-7.9 1.1-8.3 1.1A8.6 8.6 0 015.6 4.96zM3.45 12v-.26c.39.01 4.74.07 9.22-1.27.26.5.5 1.01.72 1.52-.12.03-.24.07-.36.11-4.64 1.5-7.1 5.6-7.31 5.95A8.56 8.56 0 013.45 12zm8.55 8.55a8.55 8.55 0 01-5.28-1.82c.16-.34 1.96-3.8 7.04-5.57l.06-.02c1.27 3.3 1.79 6.06 1.92 6.85a8.5 8.5 0 01-3.74.56zm5.15-1.34c-.09-.55-.57-3.18-1.75-6.43 2.84-.45 5.33.29 5.64.39a8.58 8.58 0 01-3.89 6.04z"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Подвал-демо -->
+    <p class="reveal mt-8 text-center text-sm text-slate-500">
+      Демо-проект из портфолио <a href="../../" class="text-accent-400 hover:underline">Lash</a> · сайт-визитка
+    </p>
+  </main>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

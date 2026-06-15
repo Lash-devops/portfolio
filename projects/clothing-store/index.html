@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ATELIER — Магазин одежды</title>
+  <meta name="description" content="ATELIER — демо интернет-магазина одежды: каталог, фильтры по категориям и корзина. Пример работы из портфолио Lash." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ATELIER — Магазин одежды" />
+  <meta property="og:description" content="Каталог одежды с корзиной и фильтрами." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body class="bg-white text-neutral-900 font-sans antialiased">
+
+  <!-- ============ ХЕДЕР ============ -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-neutral-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#" class="font-serif text-2xl font-extrabold tracking-tight">ATELIER</a>
+      <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-neutral-600">
+        <a href="#catalog" class="hover:text-neutral-900 transition">Каталог</a>
+        <a href="#" class="hover:text-neutral-900 transition">О бренде</a>
+        <a href="#" class="hover:text-neutral-900 transition">Доставка</a>
+      </nav>
+      <button id="cart-open" class="relative grid place-items-center w-11 h-11 rounded-full hover:bg-neutral-100 transition" aria-label="Открыть корзину">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3A1 1 0 005.4 17H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span id="cart-count" class="absolute -top-0.5 -right-0.5 grid place-items-center min-w-5 h-5 px-1 rounded-full bg-neutral-900 text-white text-xs font-bold hidden">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ ХИРО ============ -->
+    <section class="relative overflow-hidden bg-neutral-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <span class="text-sm font-semibold tracking-widest uppercase text-neutral-500">Новая коллекция · 2026</span>
+          <h1 class="mt-4 font-serif text-4xl sm:text-6xl font-extrabold leading-none">Тихая роскошь повседневности</h1>
+          <p class="mt-5 text-neutral-600 max-w-md">Базовый гардероб из качественных тканей. Минимализм, который не выходит из моды.</p>
+          <a href="#catalog" class="mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-neutral-900 text-white font-semibold hover:bg-neutral-700 transition">
+            Смотреть каталог
+          </a>
+        </div>
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80" alt="Модель в одежде из коллекции" class="rounded-2xl w-full object-cover aspect-[4/5] shadow-xl" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ КАТАЛОГ ============ -->
+    <section id="catalog" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold">Каталог</h2>
+          <p class="mt-2 text-neutral-500">Выбери категорию и добавь в корзину.</p>
+        </div>
+        <!-- Фильтры -->
+        <div id="filters" class="flex flex-wrap gap-2" role="tablist" aria-label="Категории">
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-neutral-900 text-white transition" data-filter="all">Все</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-neutral-100 hover:bg-neutral-200 transition" data-filter="top">Верх</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-neutral-100 hover:bg-neutral-200 transition" data-filter="bottom">Низ</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-neutral-100 hover:bg-neutral-200 transition" data-filter="shoes">Обувь</button>
+          <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-neutral-100 hover:bg-neutral-200 transition" data-filter="acc">Аксессуары</button>
+        </div>
+      </div>
+
+      <div id="product-grid" class="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10"></div>
+    </section>
+  </main>
+
+  <!-- ============ ФУТЕР ============ -->
+  <footer class="border-t border-neutral-200 py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+      <p class="font-serif text-lg font-bold text-neutral-900">ATELIER</p>
+      <p>Демо-проект из портфолио <a href="../../" class="underline hover:text-neutral-900">Lash</a> · интернет-магазин</p>
+    </div>
+  </footer>
+
+  <!-- ============ КОРЗИНА (DRAWER) ============ -->
+  <div id="cart-backdrop" class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="cart" class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl translate-x-full transition-transform duration-300 flex flex-col" aria-label="Корзина">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-neutral-200">
+      <h2 class="font-serif text-xl font-bold">Корзина</h2>
+      <button id="cart-close" class="grid place-items-center w-10 h-10 rounded-full hover:bg-neutral-100 transition" aria-label="Закрыть корзину">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto px-5 py-4 space-y-4"></div>
+
+    <div id="cart-empty" class="flex-1 grid place-items-center px-5 text-center text-neutral-400">
+      <div>
+        <div class="text-5xl">🛍️</div>
+        <p class="mt-3">Корзина пуста</p>
+      </div>
+    </div>
+
+    <div class="border-t border-neutral-200 p-5 space-y-4">
+      <div class="flex items-center justify-between text-lg font-bold">
+        <span>Итого</span>
+        <span id="cart-total">0 ₽</span>
+      </div>
+      <button id="checkout" class="w-full py-3.5 rounded-full bg-neutral-900 text-white font-semibold hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition" disabled>
+        Оформить заказ
+      </button>
+      <p id="checkout-msg" class="text-sm text-center font-medium text-emerald-600 hidden">✅ Спасибо за заказ! Это демо — оплата не подключена.</p>
+    </div>
+  </aside>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+    // ---- Данные товаров ----
+    const PRODUCTS = [
+      { id: 1, name: 'Хлопковая футболка', price: 2490, cat: 'top',    img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80' },
+      { id: 2, name: 'Оверсайз худи',       price: 4990, cat: 'top',    img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80' },
+      { id: 3, name: 'Льняная рубашка',     price: 3790, cat: 'top',    img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80' },
+      { id: 4, name: 'Прямые джинсы',       price: 5490, cat: 'bottom', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80' },
+      { id: 5, name: 'Брюки чинос',         price: 4290, cat: 'bottom', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80' },
+      { id: 6, name: 'Кожаные кеды',        price: 7990, cat: 'shoes',  img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
+      { id: 7, name: 'Кожаная сумка',       price: 8990, cat: 'acc',    img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80' },
+      { id: 8, name: 'Вязаная шапка',       price: 1990, cat: 'acc',    img: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=600&q=80' },
+    ];
+
+    const CART_KEY = 'atelier_cart';
+    const money = (n) => n.toLocaleString('ru-RU') + ' ₽';
+
+    let cart = (() => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; } catch { return {}; } })();
+    const saveCart = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+    // ---- Рендер каталога ----
+    const grid = document.getElementById('product-grid');
+    const renderProducts = (filter = 'all') => {
+      const items = PRODUCTS.filter(p => filter === 'all' || p.cat === filter);
+      grid.innerHTML = items.map(p => `
+        <article class="group">
+          <div class="relative overflow-hidden rounded-2xl bg-neutral-100 aspect-[4/5]">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <button data-add="${p.id}" class="absolute bottom-3 inset-x-3 py-2.5 rounded-full bg-white/95 text-neutral-900 text-sm font-semibold opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-neutral-900 hover:text-white transition">
+              В корзину
+            </button>
+          </div>
+          <h3 class="mt-3 font-medium">${p.name}</h3>
+          <p class="text-neutral-500">${money(p.price)}</p>
+        </article>
+      `).join('');
+    };
+
+    // ---- Фильтры ----
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => btn.addEventListener('click', () => {
+      filterBtns.forEach(b => { b.classList.remove('bg-neutral-900', 'text-white'); b.classList.add('bg-neutral-100'); });
+      btn.classList.add('bg-neutral-900', 'text-white'); btn.classList.remove('bg-neutral-100');
+      renderProducts(btn.dataset.filter);
+    }));
+
+    // ---- Корзина ----
+    const cartEl = document.getElementById('cart');
+    const backdrop = document.getElementById('cart-backdrop');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartEmptyEl = document.getElementById('cart-empty');
+    const cartCountEl = document.getElementById('cart-count');
+    const cartTotalEl = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout');
+    const checkoutMsg = document.getElementById('checkout-msg');
+
+    const openCart = () => { cartEl.classList.remove('translate-x-full'); backdrop.classList.remove('opacity-0', 'pointer-events-none'); document.body.style.overflow = 'hidden'; };
+    const closeCart = () => { cartEl.classList.add('translate-x-full'); backdrop.classList.add('opacity-0', 'pointer-events-none'); document.body.style.overflow = ''; };
+    document.getElementById('cart-open').addEventListener('click', openCart);
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+    backdrop.addEventListener('click', closeCart);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
+
+    const addToCart = (id) => { cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart(); openCart(); };
+    const changeQty = (id, delta) => {
+      cart[id] = (cart[id] || 0) + delta;
+      if (cart[id] <= 0) delete cart[id];
+      saveCart(); renderCart();
+    };
+
+    const renderCart = () => {
+      const ids = Object.keys(cart);
+      const count = ids.reduce((s, id) => s + cart[id], 0);
+      const total = ids.reduce((s, id) => s + cart[id] * PRODUCTS.find(p => p.id == id).price, 0);
+
+      // счётчик
+      cartCountEl.textContent = count;
+      cartCountEl.classList.toggle('hidden', count === 0);
+
+      // пусто / список
+      const empty = ids.length === 0;
+      cartEmptyEl.classList.toggle('hidden', !empty);
+      cartItemsEl.classList.toggle('hidden', empty);
+      checkoutBtn.disabled = empty;
+
+      cartItemsEl.innerHTML = ids.map(id => {
+        const p = PRODUCTS.find(p => p.id == id);
+        return `
+          <div class="flex gap-3">
+            <img src="${p.img}" alt="${p.name}" class="w-20 h-24 object-cover rounded-xl bg-neutral-100" />
+            <div class="flex-1">
+              <div class="flex justify-between gap-2">
+                <h3 class="font-medium leading-tight">${p.name}</h3>
+                <button data-remove="${id}" aria-label="Удалить" class="text-neutral-400 hover:text-red-500 transition shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+                </button>
+              </div>
+              <p class="text-neutral-500 text-sm">${money(p.price)}</p>
+              <div class="mt-2 inline-flex items-center rounded-full border border-neutral-300">
+                <button data-dec="${id}" class="w-8 h-8 grid place-items-center hover:bg-neutral-100 rounded-l-full" aria-label="Меньше">−</button>
+                <span class="w-8 text-center text-sm font-semibold">${cart[id]}</span>
+                <button data-inc="${id}" class="w-8 h-8 grid place-items-center hover:bg-neutral-100 rounded-r-full" aria-label="Больше">+</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+
+      cartTotalEl.textContent = money(total);
+    };
+
+    // ---- Делегирование кликов ----
+    grid.addEventListener('click', e => {
+      const btn = e.target.closest('[data-add]');
+      if (btn) addToCart(Number(btn.dataset.add));
+    });
+    cartItemsEl.addEventListener('click', e => {
+      const inc = e.target.closest('[data-inc]');
+      const dec = e.target.closest('[data-dec]');
+      const rem = e.target.closest('[data-remove]');
+      if (inc) changeQty(Number(inc.dataset.inc), 1);
+      if (dec) changeQty(Number(dec.dataset.dec), -1);
+      if (rem) { delete cart[rem.dataset.remove]; saveCart(); renderCart(); }
+    });
+
+    checkoutBtn.addEventListener('click', () => {
+      cart = {}; saveCart(); renderCart();
+      checkoutMsg.classList.remove('hidden');
+      setTimeout(() => checkoutMsg.classList.add('hidden'), 4000);
+    });
+
+    // ---- Старт ----
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>

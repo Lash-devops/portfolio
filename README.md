@@ -39,6 +39,28 @@ SQL для создания таблицы отзывов и правил дос
 
 Сайт опубликован через GitHub Pages: **https://lash-devops.github.io/portfolio/**
 
+## 🗂️ Проекты-примеры
+
+Учебные проекты в папке [`projects/`](projects/), отсортированы от простого к сложному. У каждого свой README с описанием.
+
+| # | Проект | Сложность | Что демонстрирует | Демо | Код |
+|---|--------|-----------|-------------------|------|-----|
+| 1 | **Сайт-визитка** | 🟢 Лёгкий | базовая вёрстка, vCard, анимации | [демо](https://lash-devops.github.io/portfolio/projects/business-card/) | [папка](projects/business-card/) |
+| 2 | **Лендинг кофейни** | 🟡 Средний | секционная вёрстка, мобильное меню, лайтбокс, карта | [демо](https://lash-devops.github.io/portfolio/projects/coffee-shop/) | [папка](projects/coffee-shop/) |
+| 3 | **Магазин одежды** | 🔴 Сложный | состояние, корзина, фильтры, `localStorage` | [демо](https://lash-devops.github.io/portfolio/projects/clothing-store/) | [папка](projects/clothing-store/) |
+
+## 📁 Структура репозитория
+
+```
+portfolio/
+├── index.html              — главный сайт-портфолио
+├── supabase-setup.sql      — SQL для базы отзывов
+└── projects/               — проекты-примеры
+    ├── business-card/      — 🟢 сайт-визитка
+    ├── coffee-shop/        — 🟡 лендинг кофейни
+    └── clothing-store/     — 🔴 интернет-магазин
+```
+
 ---
 
-© 2026 Lash
+© 2026 Lash · [GitHub](https://github.com/Lash-devops) · [Сайт](https://lash-devops.github.io/portfolio/)

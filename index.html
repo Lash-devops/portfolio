@@ -399,6 +399,9 @@
                   placeholder="Поделись впечатлением..."></textarea>
               </div>
 
+              <!-- Honeypot: скрыто от людей, ловит ботов -->
+              <input type="text" id="review-website" name="website" class="hidden" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
               <button type="submit"
                 class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 shadow-lg shadow-brand-600/30 hover:-translate-y-0.5 transition">
                 Опубликовать отзыв
@@ -506,6 +509,8 @@
               class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition resize-none"
               placeholder="Опиши свой проект..."></textarea>
           </div>
+          <!-- Honeypot: люди это поле не видят, боты заполняют -->
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <div class="sm:col-span-2">
             <button type="submit"
               class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 shadow-lg shadow-brand-600/30 hover:-translate-y-0.5 transition">
@@ -546,6 +551,24 @@
     const isSet = (v) => v && !v.startsWith('YOUR_');
     const SUPABASE_READY = isSet(SUPABASE_URL) && isSet(SUPABASE_KEY);
     const WEB3FORMS_READY = isSet(WEB3FORMS_KEY);
+
+    /* ---- Антиспам-помощники ----
+       1) honeypot — скрытое поле, которое заполняют только боты
+       2) минимальное время заполнения — боты отправляют форму мгновенно
+       3) пауза между отправками (хранится в localStorage) */
+    const PAGE_LOADED_AT = Date.now();
+    const MIN_FILL_MS = 3000;        // быстрее 3 сек — подозрительно
+    const COOLDOWN_MS = 30000;       // не чаще раза в 30 сек
+
+    // true — если форму нужно отклонить как спам
+    const looksLikeSpam = (honeypotValue, cooldownKey) => {
+      if (honeypotValue) return true;                       // ловушка сработала
+      if (Date.now() - PAGE_LOADED_AT < MIN_FILL_MS) return true; // слишком быстро
+      const last = Number(localStorage.getItem(cooldownKey) || 0);
+      if (Date.now() - last < COOLDOWN_MS) return true;     // слишком часто
+      return false;
+    };
+    const markSubmitted = (cooldownKey) => localStorage.setItem(cooldownKey, String(Date.now()));
 
     // ---- Тема (тёмная/светлая) с сохранением ----
     const html = document.documentElement;
@@ -683,12 +706,19 @@
         reviewStatus.className = 'text-sm font-medium text-red-500';
         return;
       }
+      // антиспам: honeypot + время заполнения + пауза
+      if (looksLikeSpam(document.getElementById('review-website').value, 'lash_review_ts')) {
+        reviewStatus.textContent = 'Слишком быстро или слишком часто. Подожди немного и попробуй снова.';
+        reviewStatus.className = 'text-sm font-medium text-red-500';
+        return;
+      }
       const submitBtn = reviewForm.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
       reviewStatus.textContent = 'Отправляю...';
       reviewStatus.className = 'text-sm font-medium text-slate-500';
       try {
         await insertReview({ name, text, rating });
+        markSubmitted('lash_review_ts');
         reviewForm.reset();
         ratingInput.value = '0';
         paintStars(0);
@@ -712,6 +742,13 @@
       e.preventDefault();
       if (!form.checkValidity()) {
         status.textContent = 'Пожалуйста, заполни все поля корректно.';
+        status.className = 'mt-3 text-sm font-medium text-red-500';
+        return;
+      }
+
+      // антиспам: honeypot (botcheck) + время заполнения + пауза
+      if (looksLikeSpam(form.querySelector('[name="botcheck"]').checked, 'lash_contact_ts')) {
+        status.textContent = 'Слишком быстро или слишком часто. Подожди немного и попробуй снова.';
         status.className = 'mt-3 text-sm font-medium text-red-500';
         return;
       }
@@ -742,6 +779,7 @@
         });
         const json = await res.json();
         if (json.success) {
+          markSubmitted('lash_contact_ts');
           status.textContent = '✅ Спасибо! Сообщение отправлено. Я скоро отвечу.';
           status.className = 'mt-3 text-sm font-medium text-emerald-500';
           form.reset();

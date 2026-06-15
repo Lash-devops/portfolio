@@ -110,6 +110,7 @@
         <li><a href="#about"    class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Обо мне</a></li>
         <li><a href="#services" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Услуги</a></li>
         <li><a href="#skills"   class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Навыки</a></li>
+        <li><a href="#work"     class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Работы</a></li>
         <li><a href="#reviews"  class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Отзывы</a></li>
         <li><a href="#faq"      class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">FAQ</a></li>
         <li><a href="#contact"  class="px-3 py-2 rounded-lg text-sm font-medium hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-slate-800 transition">Контакты</a></li>
@@ -141,6 +142,7 @@
         <li><a href="#about"    class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Обо мне</a></li>
         <li><a href="#services" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Услуги</a></li>
         <li><a href="#skills"   class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Навыки</a></li>
+        <li><a href="#work"     class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Работы</a></li>
         <li><a href="#reviews"  class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Отзывы</a></li>
         <li><a href="#faq"      class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">FAQ</a></li>
         <li><a href="#contact"  class="block px-3 py-2.5 rounded-lg font-medium hover:bg-brand-50 dark:hover:bg-slate-800 transition">Контакты</a></li>
@@ -350,6 +352,67 @@
             <p class="mt-1 text-slate-600 dark:text-slate-400">Собрал этот сайт-портфолио и опубликовал его в интернете. Продолжаю учиться и открыт для первых заказов.</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ============ РАБОТЫ ============ -->
+    <section id="work" class="py-20 sm:py-28">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <span class="text-brand-500 font-semibold">Работы</span>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold">Примеры сайтов</h2>
+          <p class="mt-4 text-slate-600 dark:text-slate-400">Учебные проекты, которые я сделал, чтобы показать разные стили и возможности. Каждый можно открыть вживую.</p>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Визитка -->
+          <article class="reveal group rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition flex flex-col">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" alt="Превью сайта-визитки" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Визитка</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="font-bold text-lg">Сайт-визитка</h3>
+              <p class="mt-1 text-sm text-slate-500 flex-1">Элегантная vCard-страница специалиста с контактами и навыками. Тёмная тема, стекло, анимации.</p>
+              <a href="projects/business-card/" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 font-semibold text-brand-500 hover:text-brand-600 transition">
+                Открыть демо
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Магазин -->
+          <article class="reveal group rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition flex flex-col">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80" alt="Превью интернет-магазина одежды" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Магазин</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="font-bold text-lg">Магазин одежды</h3>
+              <p class="mt-1 text-sm text-slate-500 flex-1">Каталог с фильтрами по категориям, корзина с количеством и подсчётом суммы. Сохранение между визитами.</p>
+              <a href="projects/clothing-store/" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 font-semibold text-brand-500 hover:text-brand-600 transition">
+                Открыть демо
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Кофейня -->
+          <article class="reveal group rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-1 transition flex flex-col">
+            <div class="relative overflow-hidden h-48">
+              <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80" alt="Превью лендинга кофейни" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-slate-700">Лендинг</span>
+            </div>
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="font-bold text-lg">Лендинг кофейни</h3>
+              <p class="mt-1 text-sm text-slate-500 flex-1">Атмосферный одностраничник: меню, галерея, часы работы и карта. Тёплая палитра, плавные анимации.</p>
+              <a href="projects/coffee-shop/" target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-1.5 font-semibold text-brand-500 hover:text-brand-600 transition">
+                Открыть демо
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 

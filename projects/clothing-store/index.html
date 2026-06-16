@@ -38,8 +38,8 @@
       <a href="#" class="font-serif text-2xl font-extrabold tracking-tight">ATELIER</a>
       <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-neutral-600">
         <a href="#catalog" class="hover:text-neutral-900 transition">Каталог</a>
-        <a href="#" class="hover:text-neutral-900 transition">О бренде</a>
-        <a href="#" class="hover:text-neutral-900 transition">Доставка</a>
+        <a href="#about-brand" class="hover:text-neutral-900 transition">О бренде</a>
+        <a href="#delivery" class="hover:text-neutral-900 transition">Доставка</a>
       </nav>
       <button id="cart-open" class="relative grid place-items-center w-11 h-11 rounded-full hover:bg-neutral-100 transition" aria-label="Открыть корзину">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3A1 1 0 005.4 17H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -88,10 +88,48 @@
   </main>
 
   <!-- ============ ФУТЕР ============ -->
-  <footer class="border-t border-neutral-200 py-10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
-      <p class="font-serif text-lg font-bold text-neutral-900">ATELIER</p>
-      <p>Демо-проект из портфолио <a href="../../" class="underline hover:text-neutral-900">Lash</a> · интернет-магазин</p>
+  <footer class="border-t border-neutral-200 bg-neutral-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Бренд -->
+      <div>
+        <p class="font-serif text-2xl font-bold text-neutral-900">ATELIER</p>
+        <p class="mt-3 text-sm text-neutral-500 max-w-xs">Базовый гардероб из качественных тканей. Тихая роскошь на каждый день.</p>
+      </div>
+
+      <!-- О бренде -->
+      <div id="about-brand" class="scroll-mt-24">
+        <h3 class="font-semibold text-neutral-900">О бренде</h3>
+        <p class="mt-3 text-sm text-neutral-500">ATELIER — небольшой бренд минималистичной одежды. Мы делаем вещи из натуральных тканей, которые служат годами и не выходят из моды. Шьём ограниченными партиями.</p>
+      </div>
+
+      <!-- Доставка и оплата -->
+      <div id="delivery" class="scroll-mt-24">
+        <h3 class="font-semibold text-neutral-900">Доставка и оплата</h3>
+        <ul class="mt-3 space-y-2 text-sm text-neutral-500">
+          <li>🚚 Курьером по городу — 1–2 дня</li>
+          <li>📦 Почтой по стране — 3–7 дней</li>
+          <li>🆓 Бесплатно при заказе от 10 000 ₽</li>
+          <li>💳 Оплата картой онлайн или при получении</li>
+          <li>↩️ Возврат в течение 14 дней</li>
+        </ul>
+      </div>
+
+      <!-- Контакты -->
+      <div>
+        <h3 class="font-semibold text-neutral-900">Контакты</h3>
+        <ul class="mt-3 space-y-2 text-sm text-neutral-500">
+          <li>✉️ hello@atelier-demo.ru</li>
+          <li>📞 +7 (000) 000-00-00</li>
+          <li>🕘 Ежедневно 10:00–20:00</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-neutral-200">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-neutral-500">
+        <p>© 2026 ATELIER</p>
+        <p>Демо-проект из портфолио <a href="../../" class="underline hover:text-neutral-900">Lash</a> · интернет-магазин</p>
+      </div>
     </div>
   </footer>
 

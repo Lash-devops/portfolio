@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мои полёты — ОРБИТА</title>
+  <meta name="description" content="Ваши забронированные космические полёты: номера броней, направления, даты и стоимость." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body class="bg-space-950 text-slate-200 font-sans antialiased min-h-screen overflow-x-hidden">
+  <canvas id="stars"></canvas>
+  <div class="nebula-bg" aria-hidden="true">
+    <span class="bg-nebula-600" style="width:38rem;height:38rem;top:-10rem;left:-8rem;"></span>
+    <span class="bg-accent-600" style="width:34rem;height:34rem;bottom:-12rem;right:-10rem;"></span>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-40 backdrop-blur-lg bg-space-950/70 border-b border-white/10">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between" aria-label="Основная навигация">
+      <a href="index.html" class="flex items-center gap-2 font-display font-bold text-lg text-white"><span class="text-accent-400 text-2xl leading-none">◐</span> ОРБИТА</a>
+      <ul class="hidden md:flex items-center gap-1">
+        <li><a data-nav="index.html" href="index.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Главная</a></li>
+        <li><a data-nav="destinations.html" href="destinations.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Направления</a></li>
+        <li><a data-nav="bookings.html" href="bookings.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Мои полёты</a></li>
+        <li><a data-nav="about.html" href="about.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">О нас</a></li>
+      </ul>
+      <div class="flex items-center gap-2">
+        <a href="booking.html" class="hidden sm:inline-flex px-4 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-nebula-500 text-white text-sm font-semibold hover:opacity-90 transition">Забронировать</a>
+        <button id="menu-toggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-white/10 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 bg-space-900">
+      <ul class="px-4 py-3 space-y-1">
+        <li><a href="index.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Главная</a></li>
+        <li><a href="destinations.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Направления</a></li>
+        <li><a href="bookings.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Мои полёты</a></li>
+        <li><a href="about.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">О нас</a></li>
+        <li><a href="booking.html" class="block px-3 py-2.5 rounded-lg font-semibold text-center bg-gradient-to-r from-accent-500 to-nebula-500 text-white mt-2">Забронировать</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-12 max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <h1 class="font-display text-4xl sm:text-5xl font-bold text-white">Мои полёты</h1>
+        <p class="mt-2 text-slate-400">Все ваши подтверждённые брони хранятся в этом браузере.</p>
+      </div>
+      <a href="booking.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold hover:-translate-y-0.5 transition shrink-0">+ Новая бронь</a>
+    </div>
+
+    <!-- сводка -->
+    <div id="summary" class="mt-8 hidden grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-xs text-slate-400">Всего броней</div>
+        <div id="sum-count" class="mt-1 font-display text-3xl font-bold text-white">0</div>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-xs text-slate-400">Путешественников</div>
+        <div id="sum-pax" class="mt-1 font-display text-3xl font-bold text-white">0</div>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5 col-span-2 sm:col-span-1">
+        <div class="text-xs text-slate-400">Общая сумма</div>
+        <div id="sum-total" class="mt-1 font-display text-3xl font-bold text-accent-400">0 ₽</div>
+      </div>
+    </div>
+
+    <!-- список броней -->
+    <div id="list" class="mt-8 space-y-4"></div>
+
+    <!-- пусто -->
+    <div id="empty" class="hidden text-center py-16">
+      <div class="text-6xl">🎫</div>
+      <h2 class="mt-4 font-display text-2xl font-bold text-white">Пока нет забронированных полётов</h2>
+      <p class="mt-2 text-slate-400">Выберите направление и оформите первую бронь — она появится здесь.</p>
+      <div class="mt-6 flex flex-wrap gap-3 justify-center">
+        <a href="destinations.html" class="px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold">Выбрать направление</a>
+        <a href="booking.html" class="px-6 py-3 rounded-xl border border-white/15 font-semibold hover:bg-white/5 transition">К бронированию</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/10 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-500">© <span data-year></span> ОРБИТА · демо-проект из портфолио <a href="../../" class="text-accent-400 hover:underline">Lash</a></div>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+  <script>
+    (() => {
+      const KEY = 'orbita_bookings';
+      const list = document.getElementById('list');
+      const empty = document.getElementById('empty');
+      const summary = document.getElementById('summary');
+
+      const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+      const saveAll = (arr) => localStorage.setItem(KEY, JSON.stringify(arr));
+
+      const fmtDate = (iso) => {
+        try { return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); }
+        catch { return ''; }
+      };
+
+      const render = () => {
+        const arr = load();
+        empty.classList.toggle('hidden', arr.length > 0);
+        summary.classList.toggle('hidden', arr.length === 0);
+        summary.classList.toggle('grid', arr.length > 0);
+
+        if (arr.length) {
+          document.getElementById('sum-count').textContent = arr.length;
+          document.getElementById('sum-pax').textContent = arr.reduce((s, b) => s + (b.passengers || 0), 0);
+          document.getElementById('sum-total').textContent = money(arr.reduce((s, b) => s + (b.total || 0), 0));
+        }
+
+        list.innerHTML = arr.map((b, i) => {
+          const d = (typeof getDestination === 'function' && getDestination(b.destId)) || null;
+          const planet = d
+            ? `<span class="planet ${d.ring ? 'ring' : ''} w-14 h-14 shrink-0" style="--p1:${d.p1};--p2:${d.p2};--glow:${d.glow};"></span>`
+            : `<span class="w-14 h-14 shrink-0 rounded-full bg-white/10 grid place-items-center text-2xl">🚀</span>`;
+          return `
+            <article class="reveal visible rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
+              <div class="flex items-start gap-4">
+                ${planet}
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">● Подтверждено</span>
+                    <span class="font-mono text-xs text-slate-400">${b.no}</span>
+                  </div>
+                  <h3 class="mt-2 font-display font-bold text-lg text-white">${b.destName || 'Направление'}</h3>
+                  <dl class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-sm">
+                    <div><dt class="text-slate-400 text-xs">Дата вылета</dt><dd class="text-white font-medium">${b.date || '—'}</dd></div>
+                    <div><dt class="text-slate-400 text-xs">Класс</dt><dd class="text-white font-medium">${b.className || '—'}</dd></div>
+                    <div><dt class="text-slate-400 text-xs">Путешественников</dt><dd class="text-white font-medium">${b.passengers || 1}</dd></div>
+                    <div><dt class="text-slate-400 text-xs">Стоимость</dt><dd class="text-accent-400 font-display font-bold">${money(b.total || 0)}</dd></div>
+                  </dl>
+                  <div class="mt-3 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+                    <span>На имя: <span class="text-slate-300">${b.name || '—'}</span> · ${b.email || ''}</span>
+                    <span>Оформлено: ${fmtDate(b.createdAt)}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-end">
+                <button type="button" data-cancel="${b.no}" class="text-sm text-slate-400 hover:text-red-400 transition">Отменить бронь</button>
+              </div>
+            </article>`;
+        }).join('');
+      };
+
+      list.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cancel]');
+        if (!btn) return;
+        if (!confirm('Отменить эту бронь? Действие необратимо.')) return;
+        const arr = load().filter((b) => b.no !== btn.dataset.cancel);
+        saveAll(arr);
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

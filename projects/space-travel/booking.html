@@ -26,6 +26,7 @@
       <ul class="hidden md:flex items-center gap-1">
         <li><a data-nav="index.html" href="index.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Главная</a></li>
         <li><a data-nav="destinations.html" href="destinations.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Направления</a></li>
+        <li><a data-nav="bookings.html" href="bookings.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Мои полёты</a></li>
         <li><a data-nav="about.html" href="about.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">О нас</a></li>
       </ul>
       <button id="menu-toggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-white/10 transition">
@@ -36,6 +37,7 @@
       <ul class="px-4 py-3 space-y-1">
         <li><a href="index.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Главная</a></li>
         <li><a href="destinations.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Направления</a></li>
+        <li><a href="bookings.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Мои полёты</a></li>
         <li><a href="about.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">О нас</a></li>
       </ul>
     </div>
@@ -141,7 +143,7 @@
       <p class="mt-2 text-slate-400">Номер брони: <span id="booking-no" class="font-mono text-accent-400"></span></p>
       <div id="confirm-summary" class="mt-6 max-w-md mx-auto text-left rounded-2xl border border-white/10 bg-white/5 p-6 text-sm"></div>
       <div class="mt-8 flex flex-wrap gap-3 justify-center">
-        <a href="index.html" class="px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold">На главную</a>
+        <a href="bookings.html" class="px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold">Мои полёты</a>
         <a href="destinations.html" class="px-6 py-3 rounded-xl border border-white/15 font-semibold hover:bg-white/5 transition">Выбрать ещё полёт</a>
       </div>
     </div>
@@ -302,6 +304,17 @@
       function confirmBooking() {
         const d = dest();
         const no = 'ORB-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + (d ? d.id.toUpperCase().slice(0, 3) : 'XXX');
+        // сохраняем подтверждённую бронь в список «Мои полёты»
+        const order = {
+          no, destId: st.destId, destName: d.name, date: st.date,
+          passengers: st.passengers, classId: st.classId, className: cabin().name,
+          total: total(), name: st.name, email: st.email, createdAt: new Date().toISOString(),
+        };
+        try {
+          const arr = JSON.parse(localStorage.getItem('orbita_bookings')) || [];
+          arr.unshift(order);
+          localStorage.setItem('orbita_bookings', JSON.stringify(arr));
+        } catch {}
         $('#wizard').classList.add('hidden');
         document.querySelector('#steps-bar').classList.add('hidden');
         $('#booking-no').textContent = no;

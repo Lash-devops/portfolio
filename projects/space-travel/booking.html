@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Бронирование — ОРБИТА</title>
+  <meta name="description" content="Забронируйте космическое путешествие за 4 шага: направление, дата, класс каюты и подтверждение." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body class="bg-space-950 text-slate-200 font-sans antialiased min-h-screen overflow-x-hidden">
+  <canvas id="stars"></canvas>
+  <div class="nebula-bg" aria-hidden="true">
+    <span class="bg-nebula-600" style="width:38rem;height:38rem;top:-10rem;left:-8rem;"></span>
+    <span class="bg-accent-600" style="width:34rem;height:34rem;bottom:-12rem;right:-10rem;"></span>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-40 backdrop-blur-lg bg-space-950/70 border-b border-white/10">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between" aria-label="Основная навигация">
+      <a href="index.html" class="flex items-center gap-2 font-display font-bold text-lg text-white"><span class="text-accent-400 text-2xl leading-none">◐</span> ОРБИТА</a>
+      <ul class="hidden md:flex items-center gap-1">
+        <li><a data-nav="index.html" href="index.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Главная</a></li>
+        <li><a data-nav="destinations.html" href="destinations.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Направления</a></li>
+        <li><a data-nav="about.html" href="about.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">О нас</a></li>
+      </ul>
+      <button id="menu-toggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-white/10 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 bg-space-900">
+      <ul class="px-4 py-3 space-y-1">
+        <li><a href="index.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Главная</a></li>
+        <li><a href="destinations.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Направления</a></li>
+        <li><a href="about.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">О нас</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-16 max-w-6xl mx-auto px-4 sm:px-6">
+    <h1 class="font-display text-3xl sm:text-4xl font-bold text-white">Бронирование полёта</h1>
+
+    <!-- индикатор шагов -->
+    <div id="steps-bar" class="mt-6 flex items-center gap-2">
+      <!-- заполняется ничем; используем 4 метки ниже -->
+    </div>
+    <ol class="mt-2 grid grid-cols-4 gap-2 text-center text-xs sm:text-sm">
+      <li data-dot="1" class="step-dot"><span class="num">1</span><div class="label">Направление</div></li>
+      <li data-dot="2" class="step-dot"><span class="num">2</span><div class="label">Дата и люди</div></li>
+      <li data-dot="3" class="step-dot"><span class="num">3</span><div class="label">Класс</div></li>
+      <li data-dot="4" class="step-dot"><span class="num">4</span><div class="label">Подтверждение</div></li>
+    </ol>
+    <div class="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
+      <div id="progress" class="h-full bg-gradient-to-r from-accent-500 to-nebula-500 transition-all duration-500" style="width:25%"></div>
+    </div>
+
+    <div id="wizard" class="mt-8 grid lg:grid-cols-[1fr,340px] gap-8 items-start">
+      <!-- ЛЕВО: шаги -->
+      <div>
+        <!-- Шаг 1 -->
+        <div class="step active" id="step1">
+          <h2 class="font-display text-xl font-bold text-white">Выберите направление</h2>
+          <div id="dest-list" class="mt-4 grid sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- Шаг 2 -->
+        <div class="step" id="step2">
+          <h2 class="font-display text-xl font-bold text-white">Дата вылета и путешественники</h2>
+          <label class="block mt-4 text-sm font-medium">Окно запуска</label>
+          <select id="date" class="mt-1.5 w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:ring-2 focus:ring-accent-500 outline-none transition"></select>
+
+          <label class="block mt-5 text-sm font-medium">Сколько путешественников</label>
+          <div class="mt-1.5 inline-flex items-center rounded-xl border border-white/15 bg-white/5">
+            <button type="button" id="pax-minus" class="w-12 h-12 grid place-items-center text-xl hover:bg-white/10 rounded-l-xl" aria-label="Меньше">−</button>
+            <span id="pax" class="w-14 text-center font-display text-lg font-bold">1</span>
+            <button type="button" id="pax-plus" class="w-12 h-12 grid place-items-center text-xl hover:bg-white/10 rounded-r-xl" aria-label="Больше">+</button>
+          </div>
+          <p class="mt-2 text-xs text-slate-400">Максимум 6 человек на одно бронирование.</p>
+        </div>
+
+        <!-- Шаг 3 -->
+        <div class="step" id="step3">
+          <h2 class="font-display text-xl font-bold text-white">Класс каюты</h2>
+          <div id="class-list" class="mt-4 space-y-3"></div>
+        </div>
+
+        <!-- Шаг 4 -->
+        <div class="step" id="step4">
+          <h2 class="font-display text-xl font-bold text-white">Контакты и подтверждение</h2>
+          <div class="mt-4 grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-medium">Имя</label>
+              <input id="name" type="text" autocomplete="name" class="mt-1.5 w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:ring-2 focus:ring-accent-500 outline-none transition" placeholder="Как вас зовут?" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium">Email</label>
+              <input id="email" type="email" autocomplete="email" class="mt-1.5 w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:ring-2 focus:ring-accent-500 outline-none transition" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div id="review" class="mt-5 rounded-xl bg-white/5 border border-white/10 p-5 text-sm"></div>
+          <p id="error" class="mt-3 text-sm font-medium text-red-400 hidden"></p>
+        </div>
+
+        <!-- кнопки -->
+        <div class="mt-8 flex items-center justify-between">
+          <button id="back" type="button" class="px-5 py-3 rounded-xl border border-white/15 font-semibold hover:bg-white/5 transition invisible">← Назад</button>
+          <button id="next" type="button" class="px-7 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold hover:-translate-y-0.5 transition">Далее →</button>
+        </div>
+      </div>
+
+      <!-- ПРАВО: сводка -->
+      <aside class="lg:sticky lg:top-24 rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-6">
+        <h3 class="font-display font-bold text-white">Ваш полёт</h3>
+        <dl class="mt-4 space-y-3 text-sm">
+          <div class="flex justify-between gap-3"><dt class="text-slate-400">Направление</dt><dd id="s-dest" class="text-right font-medium text-white">—</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-400">Дата</dt><dd id="s-date" class="text-right font-medium text-white">—</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-400">Путешественников</dt><dd id="s-pax" class="text-right font-medium text-white">1</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-400">Класс</dt><dd id="s-class" class="text-right font-medium text-white">—</dd></div>
+        </dl>
+        <div class="mt-4 pt-4 border-t border-white/10">
+          <div class="flex items-end justify-between">
+            <span class="text-slate-400 text-sm">Итого</span>
+            <span id="s-total" class="font-display text-2xl font-bold text-accent-400">—</span>
+          </div>
+          <p class="mt-2 text-xs text-slate-500">Бронь без предоплаты. Это демо — оплата не подключена.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ЭКРАН ПОДТВЕРЖДЕНИЯ -->
+    <div id="confirm" class="hidden text-center py-12">
+      <svg class="w-24 h-24 mx-auto" viewBox="0 0 52 52">
+        <circle class="check-circle" cx="26" cy="26" r="25" fill="none" stroke="#22d3ee" stroke-width="2"/>
+        <path class="check-mark" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round" d="M14 27l8 8 16-16"/>
+      </svg>
+      <h2 class="mt-6 font-display text-3xl font-bold text-white">Бронирование подтверждено!</h2>
+      <p class="mt-2 text-slate-400">Номер брони: <span id="booking-no" class="font-mono text-accent-400"></span></p>
+      <div id="confirm-summary" class="mt-6 max-w-md mx-auto text-left rounded-2xl border border-white/10 bg-white/5 p-6 text-sm"></div>
+      <div class="mt-8 flex flex-wrap gap-3 justify-center">
+        <a href="index.html" class="px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold">На главную</a>
+        <a href="destinations.html" class="px-6 py-3 rounded-xl border border-white/15 font-semibold hover:bg-white/5 transition">Выбрать ещё полёт</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/10 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-500">© <span data-year></span> ОРБИТА · демо-проект из портфолио <a href="../../" class="text-accent-400 hover:underline">Lash</a></div>
+  </footer>
+
+  <style>
+    .step-dot .num { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:9999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); font-weight:700; font-family:'Space Grotesk',sans-serif; }
+    .step-dot.done .num, .step-dot.current .num { background:linear-gradient(90deg,#06b6d4,#8b5cf6); border-color:transparent; color:#fff; }
+    .step-dot .label { margin-top:6px; color:#94a3b8; }
+    .step-dot.current .label { color:#fff; }
+  </style>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+  <script>
+    (() => {
+      const KEY = 'orbita_booking';
+      const preId = new URLSearchParams(location.search).get('id');
+      const def = { step: 1, destId: null, date: LAUNCH_DATES[0], passengers: 1, classId: 'comfort', name: '', email: '' };
+      let st = Object.assign({}, def);
+      try { Object.assign(st, JSON.parse(localStorage.getItem(KEY)) || {}); } catch {}
+      if (preId && getDestination(preId)) { st.destId = preId; st.step = Math.max(st.step, 2); }
+      st.step = Math.min(Math.max(st.step, 1), 4);
+
+      const $ = (s) => document.querySelector(s);
+      const save = () => localStorage.setItem(KEY, JSON.stringify(st));
+
+      // --- наполнение списков ---
+      const destList = $('#dest-list');
+      destList.innerHTML = DESTINATIONS.map((d) => `
+        <button type="button" data-dest="${d.id}" class="dest-card text-left rounded-xl border border-white/10 bg-white/5 p-4 hover:border-accent-400/50 transition flex items-center gap-3">
+          <span class="planet ${d.ring ? 'ring' : ''} w-12 h-12 shrink-0" style="--p1:${d.p1};--p2:${d.p2};--glow:${d.glow};"></span>
+          <span class="min-w-0">
+            <span class="block font-semibold text-white truncate">${d.name}</span>
+            <span class="block text-xs text-slate-400">${d.type} · ${d.durationDays} дн. · ${money(d.price)}</span>
+          </span>
+        </button>`).join('');
+
+      const dateSel = $('#date');
+      dateSel.innerHTML = LAUNCH_DATES.map((d) => `<option value="${d}">${d}</option>`).join('');
+
+      const classList = $('#class-list');
+      classList.innerHTML = CABIN_CLASSES.map((c) => `
+        <button type="button" data-class="${c.id}" class="class-card w-full text-left rounded-xl border border-white/10 bg-white/5 p-4 hover:border-accent-400/50 transition flex items-center justify-between gap-3">
+          <span>
+            <span class="block font-semibold text-white">${c.name}</span>
+            <span class="block text-xs text-slate-400">${c.desc}</span>
+          </span>
+          <span class="text-sm text-slate-300 shrink-0">×${c.mult}</span>
+        </button>`).join('');
+
+      // --- вычисления ---
+      const dest = () => getDestination(st.destId);
+      const cabin = () => CABIN_CLASSES.find((c) => c.id === st.classId);
+      const total = () => { const d = dest(); return d ? d.price * st.passengers * cabin().mult : 0; };
+
+      // --- подсветка выбора ---
+      const markSelected = () => {
+        document.querySelectorAll('.dest-card').forEach((b) =>
+          b.classList.toggle('!border-accent-400', b.dataset.dest === st.destId));
+        document.querySelectorAll('.dest-card').forEach((b) =>
+          b.classList.toggle('bg-accent-500/10', b.dataset.dest === st.destId));
+        document.querySelectorAll('.class-card').forEach((b) => {
+          const on = b.dataset.class === st.classId;
+          b.classList.toggle('!border-accent-400', on);
+          b.classList.toggle('bg-accent-500/10', on);
+        });
+        dateSel.value = st.date;
+        $('#pax').textContent = st.passengers;
+        $('#name').value = st.name;
+        $('#email').value = st.email;
+      };
+
+      // --- сводка ---
+      const updateSummary = () => {
+        const d = dest();
+        $('#s-dest').textContent = d ? d.name : '—';
+        $('#s-date').textContent = st.date || '—';
+        $('#s-pax').textContent = st.passengers;
+        $('#s-class').textContent = d ? cabin().name : '—';
+        $('#s-total').textContent = d ? money(total()) : '—';
+      };
+
+      // --- отображение шага ---
+      const showStep = () => {
+        document.querySelectorAll('.step').forEach((s, i) => s.classList.toggle('active', i === st.step - 1));
+        $('#progress').style.width = (st.step / 4 * 100) + '%';
+        document.querySelectorAll('.step-dot').forEach((dot) => {
+          const n = +dot.dataset.dot;
+          dot.classList.toggle('current', n === st.step);
+          dot.classList.toggle('done', n < st.step);
+        });
+        $('#back').classList.toggle('invisible', st.step === 1);
+        $('#next').textContent = st.step === 4 ? 'Подтвердить бронирование' : 'Далее →';
+        if (st.step === 4) buildReview();
+        save();
+      };
+
+      const buildReview = () => {
+        const d = dest();
+        $('#review').innerHTML = d ? `
+          <div class="flex justify-between gap-3 py-1"><span class="text-slate-400">Направление</span><span class="text-white font-medium text-right">${d.name}</span></div>
+          <div class="flex justify-between gap-3 py-1"><span class="text-slate-400">Дата вылета</span><span class="text-white font-medium">${st.date}</span></div>
+          <div class="flex justify-between gap-3 py-1"><span class="text-slate-400">Класс · путешественников</span><span class="text-white font-medium">${cabin().name} · ${st.passengers}</span></div>
+          <div class="mt-2 pt-2 border-t border-white/10 text-xs text-slate-400">${money(d.price)} × ${st.passengers} чел. × ${cabin().mult} (${cabin().name})</div>
+          <div class="flex justify-between gap-3 pt-1"><span class="text-slate-300 font-semibold">К оплате</span><span class="text-accent-400 font-display font-bold text-lg">${money(total())}</span></div>
+        ` : '<span class="text-slate-400">Сначала выберите направление.</span>';
+      };
+
+      // --- валидация шага ---
+      const validate = () => {
+        $('#error').classList.add('hidden');
+        if (st.step === 1 && !st.destId) return 'Выберите направление, чтобы продолжить.';
+        if (st.step === 2 && !st.date) return 'Выберите дату вылета.';
+        if (st.step === 3 && !st.classId) return 'Выберите класс каюты.';
+        if (st.step === 4) {
+          if (st.name.trim().length < 2) return 'Укажите имя.';
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(st.email)) return 'Укажите корректный email.';
+        }
+        return null;
+      };
+
+      const flash = (msg) => {
+        const el = $('#error');
+        el.textContent = msg; el.classList.remove('hidden');
+        if (st.step !== 4) { alert(msg); } // на ранних шагах нет видимого блока ошибки
+      };
+
+      // --- навигация ---
+      $('#next').addEventListener('click', () => {
+        const err = validate();
+        if (err) { flash(err); return; }
+        if (st.step < 4) { st.step++; showStep(); updateSummary(); scrollTo({ top: 0, behavior: 'smooth' }); }
+        else confirmBooking();
+      });
+      $('#back').addEventListener('click', () => { if (st.step > 1) { st.step--; showStep(); updateSummary(); } });
+
+      // --- обработчики выбора ---
+      destList.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-dest]'); if (!b) return;
+        st.destId = b.dataset.dest; markSelected(); updateSummary(); save();
+      });
+      classList.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-class]'); if (!b) return;
+        st.classId = b.dataset.class; markSelected(); updateSummary(); save();
+      });
+      dateSel.addEventListener('change', () => { st.date = dateSel.value; updateSummary(); save(); });
+      $('#pax-minus').addEventListener('click', () => { st.passengers = Math.max(1, st.passengers - 1); markSelected(); updateSummary(); save(); });
+      $('#pax-plus').addEventListener('click', () => { st.passengers = Math.min(6, st.passengers + 1); markSelected(); updateSummary(); save(); });
+      $('#name').addEventListener('input', () => { st.name = $('#name').value; save(); });
+      $('#email').addEventListener('input', () => { st.email = $('#email').value; save(); });
+
+      // --- подтверждение ---
+      function confirmBooking() {
+        const d = dest();
+        const no = 'ORB-' + String(Math.floor(Math.random() * 9000) + 1000) + '-' + (d ? d.id.toUpperCase().slice(0, 3) : 'XXX');
+        $('#wizard').classList.add('hidden');
+        document.querySelector('#steps-bar').classList.add('hidden');
+        $('#booking-no').textContent = no;
+        $('#confirm-summary').innerHTML = `
+          <div class="flex justify-between py-1"><span class="text-slate-400">Путешественник</span><span class="text-white font-medium">${st.name}</span></div>
+          <div class="flex justify-between py-1"><span class="text-slate-400">Направление</span><span class="text-white font-medium text-right">${d.name}</span></div>
+          <div class="flex justify-between py-1"><span class="text-slate-400">Дата</span><span class="text-white font-medium">${st.date}</span></div>
+          <div class="flex justify-between py-1"><span class="text-slate-400">Класс · людей</span><span class="text-white font-medium">${cabin().name} · ${st.passengers}</span></div>
+          <div class="flex justify-between pt-2 mt-1 border-t border-white/10"><span class="text-slate-300 font-semibold">Сумма</span><span class="text-accent-400 font-display font-bold">${money(total())}</span></div>
+          <p class="mt-3 text-xs text-slate-500">Детали отправлены на ${st.email} (демонстрация).</p>`;
+        $('#confirm').classList.remove('hidden');
+        localStorage.removeItem(KEY);
+        // перезапустить анимацию галочки
+        document.querySelectorAll('#confirm .check-circle, #confirm .check-mark').forEach((el) => {
+          el.style.animation = 'none'; void el.getBoundingClientRect(); el.style.animation = '';
+        });
+        scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // старт
+      markSelected(); updateSummary(); showStep();
+    })();
+  </script>
+</body>
+</html>

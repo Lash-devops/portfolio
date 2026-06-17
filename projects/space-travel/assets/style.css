@@ -1,0 +1,66 @@
+/* ===== ОРБИТА — общие стили ===== */
+:root { color-scheme: dark; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; overflow-x: clip; }
+
+/* плавное появление страницы; clip — чтобы декоративные орбиты/пятна не давали горизонтальной прокрутки */
+body { opacity: 0; animation: pageIn .6s ease forwards; overflow-x: clip; }
+@keyframes pageIn { to { opacity: 1; } }
+
+/* звёздное небо на фоне */
+#stars {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: -2; pointer-events: none; display: block;
+}
+/* туманности-пятна на фоне */
+.nebula-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+}
+.nebula-bg span {
+  position: absolute; border-radius: 9999px; filter: blur(120px); opacity: .35;
+}
+
+/* появление при скролле */
+.reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* планеты на чистом CSS */
+.planet {
+  border-radius: 9999px; position: relative;
+  background: radial-gradient(circle at 32% 28%, var(--p1), var(--p2) 70%, #000 130%);
+  box-shadow: inset -18px -14px 40px rgba(0,0,0,.55), 0 0 60px -8px var(--glow, var(--p1));
+}
+/* кольцо (Сатурн) */
+.planet.ring::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 178%; height: 52%; transform: translate(-50%,-50%) rotate(-22deg);
+  border-radius: 9999px; border: 6px solid rgba(220,200,160,.55);
+  box-shadow: 0 0 18px rgba(220,200,160,.25);
+}
+
+/* 3D-наклон карточек */
+.tilt { transform-style: preserve-3d; transition: transform .15s ease; will-change: transform; }
+.tilt-inner { transform: translateZ(40px); }
+
+/* кастомный скроллбар */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #04050d; }
+::-webkit-scrollbar-thumb { background: linear-gradient(#22d3ee,#8b5cf6); border-radius: 9999px; }
+
+/* шаги мастера бронирования */
+.step { display: none; }
+.step.active { display: block; animation: stepIn .45s ease; }
+@keyframes stepIn { from { opacity:0; transform: translateX(24px); } to { opacity:1; transform: translateX(0); } }
+
+/* анимация галочки на подтверждении */
+.check-circle { stroke-dasharray: 166; stroke-dashoffset: 166; animation: stroke .6s cubic-bezier(.65,0,.45,1) forwards; }
+.check-mark { stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke .35s cubic-bezier(.65,0,.45,1) .6s forwards; }
+@keyframes stroke { to { stroke-dashoffset: 0; } }
+
+/* уважение к настройкам пользователя */
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; opacity: 1; }
+  .reveal { transition: none; opacity: 1; transform: none; }
+  .animate-spin-slow, .animate-spin-rev, .animate-float, .animate-pulse-glow { animation: none !important; }
+  html { scroll-behavior: auto; }
+}

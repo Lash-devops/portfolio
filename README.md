@@ -48,6 +48,7 @@ SQL для создания таблицы отзывов и правил дос
 | 1 | **Сайт-визитка** | 🟢 Лёгкий | базовая вёрстка, vCard, анимации | [демо](https://lash-devops.github.io/portfolio/projects/business-card/) | [папка](projects/business-card/) |
 | 2 | **Лендинг кофейни** | 🟡 Средний | секционная вёрстка, мобильное меню, лайтбокс, карта | [демо](https://lash-devops.github.io/portfolio/projects/coffee-shop/) | [папка](projects/coffee-shop/) |
 | 3 | **Магазин одежды** | 🔴 Сложный | состояние, корзина, фильтры, `localStorage` | [демо](https://lash-devops.github.io/portfolio/projects/clothing-store/) | [папка](projects/clothing-store/) |
+| 4 | **ОРБИТА — космотуризм** | 🟣 Эксперт | многостраничный сайт (5 стр.), мастер бронирования, canvas-анимации | [демо](https://lash-devops.github.io/portfolio/projects/space-travel/) | [папка](projects/space-travel/) |
 
 ## 📁 Структура репозитория
 
@@ -58,7 +59,8 @@ portfolio/
 └── projects/               — проекты-примеры
     ├── business-card/      — 🟢 сайт-визитка
     ├── coffee-shop/        — 🟡 лендинг кофейни
-    └── clothing-store/     — 🔴 интернет-магазин
+    ├── clothing-store/     — 🔴 интернет-магазин
+    └── space-travel/       — 🟣 ОРБИТА (многостраничный)
 ```
 
 ---

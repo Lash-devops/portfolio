@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Направление — ОРБИТА</title>
+  <meta name="description" content="Подробно о направлении: программа, характеристики и стоимость полёта." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪐</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body class="bg-space-950 text-slate-200 font-sans antialiased min-h-screen overflow-x-hidden">
+  <canvas id="stars"></canvas>
+  <div class="nebula-bg" aria-hidden="true">
+    <span class="bg-nebula-600" style="width:38rem;height:38rem;top:-10rem;left:-8rem;"></span>
+    <span class="bg-accent-600" style="width:34rem;height:34rem;bottom:-12rem;right:-10rem;"></span>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-40 backdrop-blur-lg bg-space-950/70 border-b border-white/10">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between" aria-label="Основная навигация">
+      <a href="index.html" class="flex items-center gap-2 font-display font-bold text-lg text-white"><span class="text-accent-400 text-2xl leading-none">◐</span> ОРБИТА</a>
+      <ul class="hidden md:flex items-center gap-1">
+        <li><a data-nav="index.html" href="index.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Главная</a></li>
+        <li><a data-nav="destinations.html" href="destinations.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">Направления</a></li>
+        <li><a data-nav="about.html" href="about.html" class="px-3 py-2 rounded-lg text-sm font-medium hover:text-accent-400 transition">О нас</a></li>
+      </ul>
+      <div class="flex items-center gap-2">
+        <a href="booking.html" class="hidden sm:inline-flex px-4 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-nebula-500 text-white text-sm font-semibold hover:opacity-90 transition">Забронировать</a>
+        <button id="menu-toggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg hover:bg-white/10 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 bg-space-900">
+      <ul class="px-4 py-3 space-y-1">
+        <li><a href="index.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Главная</a></li>
+        <li><a href="destinations.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">Направления</a></li>
+        <li><a href="about.html" class="block px-3 py-2.5 rounded-lg font-medium hover:bg-white/10 transition">О нас</a></li>
+        <li><a href="booking.html" class="block px-3 py-2.5 rounded-lg font-semibold text-center bg-gradient-to-r from-accent-500 to-nebula-500 text-white mt-2">Забронировать</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-12 max-w-6xl mx-auto px-4 sm:px-6">
+    <a href="destinations.html" class="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-accent-400 transition">← Все направления</a>
+    <div id="content" class="mt-6"></div>
+  </main>
+
+  <footer class="border-t border-white/10 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-500">© <span data-year></span> ОРБИТА · демо-проект из портфолио <a href="../../" class="text-accent-400 hover:underline">Lash</a></div>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+  <script>
+    (() => {
+      const box = document.getElementById('content');
+      const id = new URLSearchParams(location.search).get('id');
+      const d = getDestination(id);
+      if (!d) {
+        box.innerHTML = `
+          <div class="text-center py-20">
+            <div class="text-6xl">🛰️</div>
+            <h1 class="mt-4 font-display text-3xl font-bold text-white">Направление не найдено</h1>
+            <p class="mt-2 text-slate-400">Возможно, ссылка устарела или маршрут закрыт.</p>
+            <a href="destinations.html" class="mt-6 inline-flex px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold">К списку направлений</a>
+          </div>`;
+        return;
+      }
+      document.title = `${d.name} — ОРБИТА`;
+      const spec = (label, val) => `
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <div class="text-xs text-slate-400">${label}</div>
+          <div class="mt-1 font-display font-semibold text-white">${val}</div>
+        </div>`;
+      box.innerHTML = `
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div class="reveal flex justify-center">
+            <div class="relative w-60 h-60 sm:w-72 sm:h-72">
+              <div class="planet ${d.ring ? 'ring' : ''} w-full h-full animate-float" style="--p1:${d.p1};--p2:${d.p2};--glow:${d.glow};"></div>
+              <div class="absolute inset-[-30px] rounded-full border border-white/10 animate-spin-slow">
+                <div class="absolute top-1/2 -left-2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200"></div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/10 text-slate-300">${d.type}</span>
+            <h1 class="mt-3 font-display text-4xl sm:text-5xl font-bold text-white">${d.name}</h1>
+            <p class="mt-3 text-lg text-slate-300">${d.tagline}</p>
+            <p class="mt-4 text-slate-400">${d.long}</p>
+            <div class="mt-6 flex items-center gap-4">
+              <div>
+                <div class="text-xs text-slate-400">Стоимость от</div>
+                <div class="font-display text-3xl font-bold text-accent-400">${money(d.price)}</div>
+              </div>
+              <a href="booking.html?id=${d.id}" class="ml-auto inline-flex px-6 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-nebula-500 text-white font-semibold hover:-translate-y-0.5 transition">Забронировать это направление</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 reveal">
+          <h2 class="font-display text-2xl font-bold text-white">Характеристики полёта</h2>
+          <div class="mt-4 grid grid-cols-2 lg:grid-cols-5 gap-3">
+            ${spec('Длительность', d.durationDays + ' дн.')}
+            ${spec('Расстояние', d.distanceKm)}
+            ${spec('Гравитация', d.gravity)}
+            ${spec('Температура', d.temp)}
+            ${spec('Тип', d.type)}
+          </div>
+        </div>
+
+        <div class="mt-10 reveal">
+          <h2 class="font-display text-2xl font-bold text-white">Что входит в программу</h2>
+          <ul class="mt-4 grid sm:grid-cols-3 gap-3">
+            ${d.highlights.map((h) => `
+              <li class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-4">
+                <span class="text-accent-400 mt-0.5">✦</span><span class="text-slate-300">${h}</span>
+              </li>`).join('')}
+          </ul>
+        </div>`;
+      // активировать reveal у вновь добавленных блоков
+      document.querySelectorAll('#content .reveal').forEach((el) => el.classList.add('visible'));
+    })();
+  </script>
+</body>
+</html>
